@@ -1,20 +1,39 @@
 import os
-import requests
+import smtplib
+from email.header import Header
+from email.mime.text import MIMEText
 import yfinance as yf
 
-LINE_TOKEN = os.environ.get("LINE_TOKEN")
+# ดึงค่าจาก GitHub Secrets
+EMAIL_SENDER = os.environ.get("kriangsakh1@gmail.com")  # อีเมล Gmail ของคุณ
+EMAIL_PASSWORD = os.environ.get("rdtn elto ykwp mrek")  # App Password 16 หลัก
+EMAIL_RECEIVER = os.environ.get(
+    "kriangsakh1@gmail.com"
+)  # อีเมลผู้รับ (อาจจะเป็นเมลเดียวกับผู้ส่ง)
+
 WATCH_LIST = ["NVDA", "AAPL", "GOOGL"]
 DROP_THRESHOLD = 5.0
 
 
-def send_line_notify(message):
-  if not LINE_TOKEN:
-    print("Error: ไม่พบ LINE_TOKEN")
+def send_email_notification(subject, message):
+  if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
+    print("Error: ข้อมูลอีเมลไม่ครบถ้วนใน Environment Variables")
     return
-  url = "https://notify-api.line.me/api/notify"
-  headers = {"Authorization": f"Bearer {LINE_TOKEN}"}
-  data = {"message": message}
-  requests.post(url, headers=headers, data=data)
+
+  try:
+    msg = MIMEText(message, "plain", "utf-8")
+    msg["Subject"] = Header(subject, "utf-8")
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = EMAIL_RECEIVER
+
+    # เชื่อมต่อ SMTP Server ของ Gmail
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+    server.sendmail(EMAIL_SENDER, [EMAIL_RECEIVER], msg.as_string())
+    server.quit()
+    print("ส่งอีเมลแจ้งเตือนสำเร็จ!")
+  except Exception as e:
+    print(f"เกิดข้อผิดพลาดในการส่งอีเมล: {e}")
 
 
 def check_stock_prices():
@@ -44,15 +63,16 @@ def check_stock_prices():
           else:
             news_headlines = "- ไม่พบข่าวอัปเดตในช่วงนี้"
 
+          subject = f"⚠️ แจ้งเตือนด่วน: หุ้น {ticker} ดิ่ง {change_pct:.2f}%!"
           msg = (
-              f"\n⚠️ แจ้งเตือนหุ้น/กองทุนดิ่งเกินเป้า!\nชื่อ: {ticker}\nร่วงไป:"
-              f" {change_pct:.2f}%\nราคาปัจจุบัน: ${current_price:.2f}\n\n📰"
-              f" ข่าวล่าสุดที่เกี่ยวข้อง:\n{news_headlines}"
+              f"ชื่อหุ้น: {ticker}\nร่วงไป: {change_pct:.2f}%\nราคาปัจจุบัน:"
+              f" ${current_price:.2f}\n\n📰 ข่าวล่าสุด:\n{news_headlines}"
           )
-          send_line_notify(msg)
+          send_email_notification(subject, msg)
     except Exception as e:
       print(f"เกิดข้อผิดพลาดสำหรับ {ticker}: {e}")
 
 
 if __name__ == "__main__":
   check_stock_prices()
+ 
