@@ -5,11 +5,11 @@ from email.mime.text import MIMEText
 import yfinance as yf
 
 # ดึงค่าจาก GitHub Secrets
-EMAIL_SENDER = os.environ.get("kriangsakh1@gmail.com")  # อีเมล Gmail ของคุณ
-EMAIL_PASSWORD = os.environ.get("rdtn elto ykwp mrek")  # App Password 16 หลัก
-EMAIL_RECEIVER = os.environ.get(
-    "kriangsakh1@gmail.com"
-)  # อีเมลผู้รับ (อาจจะเป็นเมลเดียวกับผู้ส่ง)
+EMAIL_SENDER = os.environ.get("EMAIL_SENDER")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER")
+
+# อีเมลผู้รับ (อาจจะเป็นเมลเดียวกับผู้ส่ง)
 
 WATCH_LIST = ["NVDA", "AAPL", "GOOGL"]
 DROP_THRESHOLD = 5.0
