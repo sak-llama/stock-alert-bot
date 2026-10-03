@@ -4,7 +4,7 @@ import yfinance as yf
 st.set_page_config(page_title="Stock Checker", layout="wide")
 st.title("เช็กราคาหุ้น")
 
-DEFAULT = ["NVDA", "AAPL", "GOOGL", "MSFT", "TSLA"]
+DEFAULT = ["SCB", "KTB", "GOOGL", "MSFT", "TSLA"]
 
 st.sidebar.header("เลือกหุ้น")
 picks = []
@@ -16,6 +16,14 @@ for i in range(5):
 @st.cache_data(ttl=300)
 def get_data(sym):
     hist = yf.Ticker(sym).history(period="6mo")
+     # ถ้าไม่เจอข้อมูล และไม่มี .BK ต่อท้าย ให้ลองเติม .BK เผื่อเป็นหุ้นไทย
+
+    if len(hist) < 2 and not sym.endswith(".BK"):
+
+        sym_bk = sym + ".BK"
+
+        hist = yf.Ticker(sym_bk).history(period="6mo")
+
     if len(hist) < 2:
         return None
     last = hist["Close"].iloc[-1]
