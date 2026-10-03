@@ -52,7 +52,7 @@ def check_stock_prices():
 
         print(f"{ticker}: ราคาปัจจุบัน {current_price:.2f} ({change_pct:.2f}%)")
 
-        if True:
+        if change_pct <= DROP_THRESHOLD:
           news_list = stock.news
           news_headlines = ""
           if news_list:
