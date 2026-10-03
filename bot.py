@@ -12,7 +12,7 @@ EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER")
 # อีเมลผู้รับ (อาจจะเป็นเมลเดียวกับผู้ส่ง)
 
 WATCH_LIST = ["NVDA", "AAPL", "GOOGL"]
-DROP_THRESHOLD = -100.0
+DROP_THRESHOLD = 5.0
 
 
 def send_email_notification(subject, message):
@@ -52,7 +52,7 @@ def check_stock_prices():
 
         print(f"{ticker}: ราคาปัจจุบัน {current_price:.2f} ({change_pct:.2f}%)")
 
-        if change_pct <= -abs(DROP_THRESHOLD):
+        if True:
           news_list = stock.news
           news_headlines = ""
           if news_list:
@@ -63,7 +63,7 @@ def check_stock_prices():
           else:
             news_headlines = "- ไม่พบข่าวอัปเดตในช่วงนี้"
 
-          subject = f"⚠️ แจ้งเตือนด่วน: หุ้น {ticker} ดิ่ง {change_pct:.2f}%!"
+          subject = f"แจ้งเตือนด่วน: หุ้น {ticker} ดิ่ง {change_pct:.2f}%!"
           msg = (
               f"ชื่อหุ้น: {ticker}\nร่วงไป: {change_pct:.2f}%\nราคาปัจจุบัน:"
               f" ${current_price:.2f}\n\n📰 ข่าวล่าสุด:\n{news_headlines}"
