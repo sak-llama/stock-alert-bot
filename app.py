@@ -4,7 +4,7 @@ import yfinance as yf
 st.set_page_config(page_title="Stock Checker", layout="wide")
 st.title("เช็กราคาหุ้น")
 
-DEFAULT = ["SCB", "KTB", "GOOGL", "MSFT", "TSLA"]
+DEFAULT = ["SCB", "KTB", "TSM", "GOOGL", "TSLA"]
 
 st.sidebar.header("เลือกหุ้น")
 picks = []
