@@ -11,7 +11,7 @@ EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER")
 
 # อีเมลผู้รับ (อาจจะเป็นเมลเดียวกับผู้ส่ง)
 
-WATCH_LIST = ["NVDA", "AAPL", "GOOGL"]
+WATCH_LIST = ["SCB", "KTB", "TSM", "GOOGL", "TSLA"]
 DROP_THRESHOLD = 15.0
 
 
